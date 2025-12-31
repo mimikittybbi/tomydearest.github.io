@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Your letter is here💌</title>
+
+<!-- Fonts cute + tsParticles -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@3.9.1/tsparticles.bundle.min.js"></script>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #ffe4e9;
+        font-family: "Quicksand", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+    #tsparticles {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+    .letter-container {
+        position: relative;
+        z-index: 1;
+        background: #fff0f5;
+        border: 2px solid #ffb6c1;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 650px;
+        padding: 30px;
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+        font-family: "Pacifico", cursive;
+        text-align: center;
+        color: #d6336c;
+        margin-bottom: 10px;
+    }
+    .letter-text {
+        background: #fff;
+        border: 1px dashed #ff9fc1;
+        padding: 20px;
+        border-radius: 15px;
+        font-size: 17px;
+        line-height: 1.6;
+        color: #5e2d2d;
+        min-height: 240px;
+        white-space: pre-wrap;
+    }
+    button {
+        margin-top: 20px;
+        background: #ff9fc1;
+        border: none;
+        color: white;
+        font-size: 16px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    button:hover {
+        background: #ff88b0;
+    }
+    audio { display: none; }
+</style>
+</head>
+<body>
+
+<!-- particle layer -->
+<div id="tsparticles"></div>
+
+<!-- sound effect -->
+<audio id="openSound" src="https://cdn.pixabay.com/download/audio/2021/09/05/audio_58ad7b9bcf.mp3?filename=letter-flip-142808.mp3"></audio>
+
+<!-- background music -->
+<audio id="bgMusic" loop>
+    <source src="C:\Users\hoanglemy\OneDrive\Máy tính\New folder\love..mp3" type="audio/mpeg">
+</audio>
+
+<div class="letter-container">
+    <h1 id="nameTitle"></h1>
+    <div class="letter-text" id="letterText"></div>
+
+    <button id="btnPlayMusic" style="display:none;">🎵 Bật nhạc nền</button>
+    <button onclick="goHome()">Quay lại trang chủ</button>
+</div>
+
+<script>
+window.addEventListener("load", function() {
+    const openAudio = document.getElementById("openSound");
+    openAudio.volume = 0.5;
+    openAudio.play().catch(() => {});
+
+    const bg = document.getElementById("bgMusic");
+    bg.volume = 0.3;
+    bg.play().then(() => {
+        document.getElementById("btnPlayMusic").style.display = 'none';
+    }).catch(() => {
+        document.getElementById("btnPlayMusic").style.display = 'block';
+    });
+
+    tsParticles.load("tsparticles", {
+      fpsLimit: 60,
+      particles: {
+        number: { value: 30 },
+        color: { value: ["#ff9fc1","#ffc0cb","#ffe4e9"] },
+        shape: {
+          type: "image",
+          image: [
+            { src: "https://cdn-icons-png.flaticon.com/512/1076/1076928.png", width: 20, height: 20 },
+            { src: "https://cdn-icons-png.flaticon.com/512/616/616438.png", width: 20, height: 20 }
+          ]
+        },
+        opacity: { value: 0.8, random: true },
+        size: { value: { min: 12, max: 24 } },
+        move: { direction: "bottom", enable: true, outModes: "out", speed: { min: 1, max: 3 } }
+      },
+      detectRetina: true,
+      background: { color: "transparent" }
+    });
+});
+
+// play/pause music
+document.getElementById("btnPlayMusic").onclick = function() {
+    const bg = document.getElementById("bgMusic");
+    if (bg.paused) {
+        bg.play().catch(()=>{});
+        this.textContent = "🔇 Tắt nhạc nền";
+    } else {
+        bg.pause();
+        this.textContent = "🎵 Bật nhạc nền";
+    }
+};
+
+// logic thư
+const params = new URLSearchParams(window.location.search);
+let name = params.get("name");
+const level  = params.get("level");
+const isCommon = params.get("common") === "1";
+
+// nếu từ nút "không có tên", hỏi tên người dùng
+if (isCommon) {
+    name = prompt("Nhập tên của bạn để nhận thư 💌:")?.trim() || "Bạn thân mến";
+}
+
+document.getElementById("nameTitle").textContent = name
+    ? `❤️ To my dearest ${name} 💌`
+    : "💌 Thư dành riêng cho bạn 🌸";
+
+
+const commonLetter = `
+Chào ${name} 💖,
+
+Cảm ơn vì đã quan tâm đến cái page này của mình nhe, xin lỗi nhiều vì bạn không tìm thấy tên của mình. Chúc bạn năm mới vui vẻ và thiệt là thành công nha. Có thể tụi mình không thân, có thân mà mình quên, từng thân hay không thân thiết gì cả, chỉ mong mọi người sẽ trải qua ngày lễ và cả những ngày trong năm thiệt là vui. Cảm ơn vì đã đến và ở lại, cảm ơn vì đã xuất hiện trong cuộc đời của mình, có thể dù chúng ta chỉ từng thân hoặc lướt qua cuộc đời nhau, nhưng bạn ơi, mình chúc bạn một năm thiệt là tươi!! Hãy cười thật nhiều nhé.
+
+Một lần nữa, cảm ơn rất nhiều.
+`;
+
+const letters = {
+  sữa: `sữa ơi, 
+  
+  12 năm chơi với sữa thiệt sự là vui dữ. cảm ơn vì đã đến bên mi nha dinh. năm mới, chúc dinh thiệt hạnh phúc, chúc dinh thiệt thành công và trọn vẹn. năm mới vui vẻ, dù thế nào đi nữa, t và mọi người vẫn sẽ luôn ở bên m, học thật tốt, đậu nv1 nha!!! lớp 12 rùi, cố gắng lên <33
+  
+  thương dinh thiệt nhiều`,
+  huỳnh:   `huỳnh ơi,
+  thiệt sự tui biết ơn bà lắm. không biết nói gì để diễn tả được hết cái sự biết ơn này luôn, t biêt là m cũng bận, nhưng mỗi lần rủ đi đâu là m cũng cố gắng sắp xếp theo lịch mng hết trơn á. cảm ơn vì đã luôn nhớ đến tụi t, cảm ơn vì đã luôn gắn kết 5 đứa lại với nhau, thiệt sự biết ơn m lắm. năm mới, huỳnh phải vui lên nha!! bà lúc nào cũng mang đến sự tích cực cho người khác thì tui không muốn bà buồn đâu. thiệt thành công, đậu nv1, đừng tiếc nuối gì hết nhé! phải thiệt là thiệt là hạnh phúc.
+  
+  cảm ơn huỳnh, thương m nhìu nhìu`,
+  trần: `gửi tới như,
+  
+  cảm ơn như nhiều, m lúc nào cũng ở bên an ủi t hết trơn á, m để ý mấy cái tiểu tiết nhỏ nhặt trong cuộc sống t, đến mức t không nghĩ sẽ có một người vì t mà làm như vậy luôn. 12 năm chơi với m, có thể là một khoảng thời gian dài, nhưng mà t hy vọng nó sẽ dài hơn nữa. nên năm nay, như ơi, thiệt hạnh phúc và thành công nha. t không muốn m buồn vì những điều không đáng, t thương m lắm, tận hưởng cuộc sống đi!! năm nay 12 rùi đó, không còn gì để mất đâu, sống thiệt trọn vẹn và đừng tiếc cái gì hết nha.
+  
+  love you`,
+  quen: `gửi mphun,
+  
+  m là người t nói chuyện riêng ít nhất trong 4 đứa luôn. huhu cũng buồn dữ nhưng mà hong sao, t quý m lắm. năm mới vui vẻ, thành công, đậu nv1, cố lên nhe!!! cảm ơn vì đã đến và chơi với t tới tận bây giờ nha, mình phải đi với nhau thiệt lâu đó.
+  
+  hihi từ người thương,`,
+  kie:`hello kie,
+
+  không biết bắt đầu từ đâu nữa, m là người t beef nhiều nhất 2025 luôn á. thiệt sự nhiều lúc t cũng nghĩ là có khi duyên mình tới đó thui à nhưng mà huhu cảm ơn m nhiều lắm, cảm ơn vì luôn bao dung với t, có thể là t đã nói nhiều lần rồi nhưng mà thiệt sự luôn á, t biết ơn m lắm. cảm ơn vì đã ở lại với t, cảm ơn vì luôn quan tâm t, cảm ơn vì đã ở bên t những lúc t cảm thấy tồi tệ nhất. thiếu m chắc t sống k nổi, dù tụi mình bất đồng quan điểm nhiều thiệt, nhưng mà kie ơi, t quý m lắm. và t hy vọng rằng m cũng sẽ coi t là một người bạn mà m có thể tin tưởng và chia sẻ chuyện của m, t biết xung quanh m cũng có nhiều chuyện xảy ra lắm, nên t mong t cũng sẽ là một người đáng tin cậy để m có thể tâm sự về những chuyện đó. 2026 rồi và t vẫn biết ơn m, cảm ơn vì đã xuất hiện, cảm ơn vì đã ở lại. năm mới, hạnh phúc và thiệt thành công nha.
+  
+  cảm ơn kie nhiều lắm`,
+  bèo: `chào bèo,
+  
+từ lúc m vào tù tới giờ, có thể t chưa bao giờ hoặc không bao giờ nói ra nhưng mà thiệt sự, t nhớ m lắm. trước khi m vào nk, ngày nào t với m cũng nch, ngày nào cũng đi chơi rồi chơi game này kia, giờ thì khác òi. có thể là không thân bằng đợt trước nữa, nhưng mà cảm ơn bèo nhiều nha. m lúc nào cũng nghĩ cho t hết, m lúc nào cũng ưu tiên t, nhiều lúc t cảm thấy m thương t hơn cả m thương chính m nữa. m là người đầu tiên, t vừa thấy biết ơn, vừa thấy có lỗi. t sống vô tâm dữ luôn á, xin lỗi bèo nha. kbt 2025 t làm m buồn nhiêu lần r nữa. có thể bây giờ ít đi chơi, ít nch lại, t chỉ muốn bèo biết là, t sẽ kh baog quên m đâu, đừng có lo nhen. t chỉ sợ m ghét t thôi à :)) 2026, bèo phải thiệt hạnh phúc, phải học thiệt giỏi và đậu nv1 nha, t tin m sẽ làm được. phải thiệt vui, phải cười thiệt nhiều và đừng nuối tiếc gì hết. cảm ơn bèo, vì đã đến bên t, cảm ơn bèo vì đã ở lại bên t. m sẽ luôn là người đặc biệt nhất từng xuất hiện trong cuộc đời t.
+
+bèo cố lên nhé`,
+tmjnku:`tmjnku oi,
+đầu tiên thì xin lỗi tminh nhiều vì dnay t bận quá, trông t có vẻ vô tâm với vcd, xin lỗi nhen. năm mới vui vẻ, đậu nv1 và sống cuộc sống mà m luôn ao ước, cười thiệt nhiều nha. 
+
+love you`,
+thha:`thha oi,
+
+chào thha hen, hăm biết thha có đọc được hong, nhma muốn viết cho thha vài dòng. 2026 phải cười thiệt nhiều và thiệt hạnh phúc nhe. t không trực tiếp ở cạnh m, t cũng kh còn nch với m nhiều nữa, nhưng cgi m up t cũng xem hết á, m giỏi quá chừng, trộm vía. cố gắng lên nhen, 2026 tươi thiệt tươi nhe<3 cảm ơn thha vì mọi thứ tụi mình đã từng trải qua.
+
+thương elm`,
+yoayy:`tình ju của t,
+
+ayy ơi, thương m quá. lúc nào cũng thương m, lúc nào cũng nhớ về 4 đứa mình dữ. lâu lâu 2 đứa mình vẫn nch, story m t vẫn xem đầy đủ, t biết m stress m mệt lắm, mà t hong biết an ủi gì ngoài cố lên, mệt quá thì dừng lại nghỉ ngơi xíu rùi bước tiếp. 2026 cười thiệt nhiều, ngủ đủ giấc, sống thiệt vui nha! cảm ơn ayy vì đã luôn nhớ đến t, đến 4 đứa mình, cảm ơn vì mọi thứ.
+
+thương ayy nhìu lắm`,
+mngoc: `mngot iu,
+
+lâu lắm rùi mình không contact, nên t không sure m có đọc được hay không, huhu. nhưng mà 2026, chúc mngoc thiệt nhiều. chúc m cười thật nhiều, chúc m học thiệt giỏi, cố gắng lên nhen. t thương m lắm, cảm ơn vì đã xuất hiện trong cuộc sống của t, có thể dù bọn mình hong còn thân như trước, nhma mngoc oi, t quý m lắm.
+
+love u`,
+youngk:`con vk ồn ào thân mến,
+
+đừng làm mất chuỗi nữa nhé. chúc 2026, ngọc hà đậu nv1, day6 về VN mở concert. cười thiệt nhiều, sống thiệt vui nhen! cảm ơn vì luôn ở bên t, cảm ơn vì luôn nghe t nói nhảm, thương m lắm hihi.
+
+học thiệt giỏi, sống thiệt vui nha`,
+an: `an có đọc đc hong dạ,
+
+tại cnay t up ig chính nên t nghĩ m sẽ dô xem hihi. 2025 2 mình đâu có nói chuyện đâu? bùn ní ghê, riết r t kbt gì về m hết trơn. m vui là được ời. 2026, cười thiệt nhiều, full ride, full tuition, nchl full of love đó vậy đi. cảm ơn nha, thương m lắm con gà.
+
+từ người thương em an nhất thế giới này`,
+gobi: `hello gobi,
+
+người mà e k nghĩ e sẽ nch và thân đến mức như v là c á gobi. ban đầu em cũng chỉ định fl cho vui thôi à, ai ngờ nói chuyện vui quá chơi tới giờ luôn=))) cảm ơn vì đã luôn nghe em nói nhảm nói xàm, cảm ơn vì luôn động viên và khen em, huhu c thiệt sự là một người rất quan trọng trong năm nay của ẽm iu luôn á. thương ldansink lắm, hy vọng c sẽ gặp được ng thiệt tốt, thương c thiệt nhiều. 2026 cười thật nhiều, sống thiệt vui nha cốt!
+
+từ con vk của gobi`,
+dủngxỉ: `hello dủng xỉ diệt gà,
+
+ấn tượng ban đầu của ẽm với dủng xỉ kh tốt lắm(vì dủng xỉ bẻ chuỗi pinson). nhma cảm ơn định mệnh đã để ẽm iu nch với dủng xỉ, ban đầu dô group đâu biết dủng xỉ là ai đâu, lúc sau mới biết ớ. huhu mãi mới có người giỡn cùng tần số như v luôn á, love dủng xỉ. cảm ơn vì luôn kiếm những người liên quan đến ẽm iu nha:)) nhìn d chứ mỗi lần nghe c kể em buồn cười vcd. chúc bà 2026 thả được 100 cái uni(cho tui càng tốt), cười thiệt nhiều và sống thiệt vui nha cốt.
+
+từ bạch nguyệt quang đáng iu cute hột me của dủng xỉ`,
+david: `anh gọt tui,
+
+xin lũi vì 2025 báo anh hơi nhiều :))) cuối tháng 1 anh last day r kbt có còn nch nhiều nữa hong nhma 2025 anh ngồi nấu xói với em, em mắc cười dữ. lúc đầu e cũng đâu nghĩ 2 mình thân nhau d đâu má. 2026, chúc kiếm việc lương 1 tháng đủ mua biệt thự, cười thiệt nhiều để còn nghe ẽm iu nói xấu bnq xong nch với nó nữa=)))))) cảm ơn bà nha!
+
+chúc david tháng 1 nhận 100 cái uni`,
+ken: `hi ông,
+
+phải nói từ đâu đây ta, thiệt ra ban đầu tụi mình k nch nhiều đến v. ừa thì ban đầu t có hơi bài xích tụi con trai, nhma chơi với m vui lắm. cảm ơn ken nhiều, lúc nào cũng nghe t tâm sự hết, m lúc nào cũng an ủi với động viên t, biết ơn ghê. dù nhìu lúc m joke k mắc cười thiệt, nhma cảm ơn nhìu. 2026 cười thiệt nhiều, đậu Y dược và sống thiệt vui nha.
+
+và hy vọng 2 đứa mình sẽ chơi với nhau thiệt lâu.`,
+xan:`xan oi,
+
+t biết 2025 là một năm khó khăn với m, nên t hy vọng 2026 mọi thứ sẽ nhẹ nhàng với m hơn nha. cảm ơn m nhiều, lúc nào cũng nghe t rant hết. 2026, t chỉ mong m bình an=))))))) thủ khoa nhé b tôi!
+
+từ ng ck k danh phận của em`,
+uka:`hello bạn cùng bàn,
+
+nếu nghỉ học, hãy báo trước(tôi thì không). chúc artist 2026 khách mua com vô nườm nượp bận tới tấp(nhma giàu), thủ khoa nhé! cười thiệt nhiều, sống thiệt vui nhen. dù sao đi nữa, học thiệt tốt(để còn gánh t), mua com giành được slot nh.
+
+từ vk`,
+bduy:`hello,
+
+happy new year năm mới vui vẻ. 2026 chúc m được 10 toán, 10 hóa, 10 sinh, thủ khoa ban B, không bị toán nắc nữa. chúc m có những mối quan hệ lành mạnh, những tình bạn đẹp thiệt đẹp ở đại học(để kphai dính drama). cười thiệt nhiều, học thiệt giỏi nha.
+
+cam on vi da den`,
+lón:`cn vk này,
+
+2026 phải thiệt hạnh phúc, đừng buồn vì những chuyện không đáng và những người không xứng để m quan tâm. t sẽ luôn ủng hộ quyết định của m, cười thiệt nhiều, học thiệt giỏi, đậu nv1 và đừng từ bỏ đam mê nha trời. thương m lắm, cố gắng nhen!!!
+
+vk james gửi `,
+hquin:`con vk này,
+
+2026 đừng có buồn nhiều, hạnh phúc lên má. mọi người luôn ở bên m, mọi người thương m lắm. cười thiệt nhiều, học thiệt giỏi, đậu nv1 và đừng có sợ cái gì hết á. năm cuối rồi, sống thiệt trọn vẹn để đừng tiếc gì hết nha. mạnh mẽ lên, tụi t sẽ luôn ủng hộ m mà. sống vì bản thân, thương bản thân nhiều hơn nhé.
+
+thương vk`,
+tquanh:`quosh tuyển địa,
+
+ban đầu t vào đăng kí t thấy tên m t cũng sốc vch. hihi nhờ v mới bít tqanh cũng bựa bựa. 2026 chúc tui và bà mỗi đứa ẵm cái giải nhất, được hơn nữa thì ẵm luôn cái thủ khoa. bà oi, thương bà lắm! năm mới cười thiệt nhiều(cười như 2025 cũng được), đậu nv1 nhen!! cố lên ợ hihihihi
+
+ng dễ thương nhất tgioi gửi `,
+hnhuw:` chào m!
+ 2026, chúc m thiệt nhiều niềm vui! học thiệt giỏi, lụm cái top 1, lụm cái giải và đậu nv1 nhen! cố lên, bà giỏi dữ luôn á. cảm ơn vì đã bắt chuyện với tui, cảm ơn vì đã đến và ở lại với tui, bà động viên tui rất nhiều luôn, thương như lắm. 2026 thiệt hạnh phúc, cười thiệt nhiều nha!!!!
+
+ <3`
+};
+
+const finalText = isCommon
+    ? commonLetter
+    : (letters[name] || `
+Chào ${name},
+
+Cảm ơn vì đã đọc thư và quan tâm đến thư của mình, năm mới vui vẻ nha!!
+`);
+
+document.getElementById("letterText").textContent = finalText;
+
+// quay lại
+function goHome() {
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
